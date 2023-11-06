@@ -1,0 +1,20 @@
+{
+  "name": "phorest-cypress-tests",
+  "version": "1.0.0",
+  "description": "This repo contains e2e tests for voucher/gift card purchase for Phorest demo salon site",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cypress-test": "cypress run --spec './cypress/e2e/tests/**/*.js' --browser chrome --headed code=false "
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "This repo contains e2e test scripts for gift card/voucher purchase for Phorest demo salon site"
+  },
+  "devDependencies": {
+    "cypress": "^13.4.0",
+    "cypress-mochawesome-reporter": "^3.6.1"
+  }
+}
