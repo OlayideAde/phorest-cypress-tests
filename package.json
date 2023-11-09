@@ -14,8 +14,8 @@
     "url": "This repo contains e2e test scripts for gift card/voucher purchase for Phorest demo salon site"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.2.0",
     "cypress": "^13.4.0",
-    "cypress-mochawesome-reporter": "^3.6.1",
-    "faker": "^5.5.3"
+    "cypress-mochawesome-reporter": "^3.6.1"
   }
 }
