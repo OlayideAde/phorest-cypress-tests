@@ -3,10 +3,10 @@
 name: Cypress headless browser tests
 
 on: 
-  push:
-    branches: 
-      - main
-  workflow_dispatch
+  - push:
+      branches: 
+        - main
+  - workflow_dispatch
 
 jobs:
   headless-run:
