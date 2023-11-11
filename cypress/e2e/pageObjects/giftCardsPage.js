@@ -19,24 +19,8 @@ export class GiftCardsPage {
     return cy.get('textarea[data-target="email.recipientMessageInput"]');
   }
 
-  getFirstAmountOption() {
-    return cy.get("#option50");
-  }
-
-  getSecondAmountOption() {
-    return cy.get("#option100");
-  }
-
-  getThirdAmountOption() {
-    return cy.get("#option150");
-  }
-
-  geFourthAmountOption() {
-    return cy.get("#optionOther");
-  }
-
   getSubmitButton() {
-    return cy.get('button[data-target="checkout.checkoutBUtton"]');
+    return cy.get('button[data-target="checkout.checkoutButton"]');
   }
 
   getAmountInputField() {
@@ -61,5 +45,20 @@ export class GiftCardsPage {
 
   getRecipientEmailError() {
     return cy.get('div[data-target="email.recipientEmailError"]');
+  }
+
+  fillSenderForm(email, firstname, lastname) {
+    this.getPurchaserEmailField().type(email)
+    this.getPurchaserFirstNameField().type(firstname)
+    this.getPurchaserLastNameField().type(lastname)
+  }
+
+  fillRecipientForm(email, message) {
+    this.getRecipientEmailField().type(email)
+    this.getRecipientMessageField().type(message)
+  }
+
+  selectOption(value) {
+    cy.get(`#option${value}`).check()
   }
 }
