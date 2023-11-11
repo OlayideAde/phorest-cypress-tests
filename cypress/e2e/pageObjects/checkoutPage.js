@@ -1,29 +1,25 @@
 export class CheckoutPage {
-    getConfirmButton() {
-        return cy.contains('Confirm Details')
-    }
+  getConfirmDetailsButton() {
+    return cy.contains("Confirm Details");
+  }
 
-    getCardNameField() {
-        return cy.get('#card-name')
-    }
+  getSubmitButton() {
+    return cy.get("button#submitButton");
+  }
 
-    getCardNumberField() {
-        return cy.get('#card-number')
-    }
+  getSuccessNotificationMessage() {
+    return cy.get('p').contains('Payment accepted, thank you!')
+  }
 
-    getCardZipField() {
-        return cy.get('#card-zip')
-    }
+  getDoneButton() {
+    return cy.get('button[data-action="application#doneAction"]')
+  }
 
-    getCardExpirationField() {
-        return cy.get('#card-expiry')
-    }
-
-    getCardCvvField() {
-        return cy.get('#card-security')
-    }
-
-    getSubmitButton() {
-        return cy.get('button#submitButton')
-    }
+  fillCardDetails(name, zip, number, expiry, cvv) {
+    cy.iframe("[id^=hostedform]").find("#card-name").type(name);
+    cy.iframe("[id^=hostedform]").find("#card-number").type(number);
+    cy.iframe("[id^=hostedform]").find("#card-expiry").type(expiry);
+    cy.iframe("[id^=hostedform]").find("#card-security").type(cvv);
+    cy.iframe("[id^=hostedform]").find("#card-zip").type(zip);
+  }
 }
