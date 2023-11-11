@@ -15,4 +15,5 @@ module.exports = defineConfig({
       code: false
     }
   },
+  chromeWebSecurity: false,
 });
