@@ -2,11 +2,7 @@
 
 name: Cypress headless browser tests
 
-on: 
-  push:
-    branches: 
-      - main
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   headless-run:
