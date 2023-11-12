@@ -5,9 +5,9 @@ This repo contains UI e2e test scripts for the gift cards/voucher purchase featu
 
 ## Run tests locally
 ### Setup
-1. Clone the repo locally using `git clone git@github.com:OlayideAde/phorest-cypress-tests.git`
+1. Clone the repo locally with command `git clone git@github.com:OlayideAde/phorest-cypress-tests.git`
 2. Install NPM dependencies by running `npm i`
-3. Access the `cypress.env.json` file in the root of the project's directory and replace the `sender_email` and `recipient_email` properties with the email addresses where you would like to receive the receipts/payment confirmation emails from the test runs.
+3. Access the `cypress.env.json` file in the root of the project's directory and replace the `sender_email` and `recipient_email` values with the email addresses where you would like to receive the receipts/payment confirmation emails from the test runs.
 4. Run tests locally with this command `npm run cypress-test`
 5. Open cypress runner with this command `npm run cy:open`
 
