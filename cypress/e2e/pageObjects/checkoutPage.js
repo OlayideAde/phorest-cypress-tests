@@ -20,9 +20,8 @@ export class CheckoutPage {
   }
 
   verifySuccessPage() {
-    cy.wait(1000);
     //verify that user is on success page
-    cy.get('div[data-controller="success"]').should('be.visible');
+    cy.get('div[data-controller="success"]', { timeout:10000 }).should('be.visible');
     cy.url().should("include", "#success");
     //verify payment confirmation message is displayed
     cy.get('p').contains('Payment accepted, thank you!').should("be.visible");
