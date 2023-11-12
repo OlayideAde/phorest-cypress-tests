@@ -15,201 +15,199 @@ let senderEmail;
 let recipientEmail;
 let message;
 
-describe("Gift cards purchase tests", () => {
+describe("Purchase Gift cards tests", () => {
   before(() => {
     giftCardsPage = new GiftCardsPage();
     checkoutPage = new CheckoutPage();
   });
 
-  describe("Gift cards purchase page UI test", () => {
-    describe("Positve tests", () => {
-      beforeEach(() => {
-        cy.visit("/");
-        cy.fixture("cards").its("test_card").as("testcard");
+  describe("Positve tests", () => {
+    beforeEach(() => {
+      cy.visit("/");
+      cy.fixture("cards").its("test_card").as("testcard");
+    });
+
+    it("should verify that user can purchase gift card of fixed value for self", () => {
+      //select option for $50
+      giftCardsPage.selectOption("50");
+
+      //enter email, first name and last name
+      senderEmail = Cypress.env("sender_email");
+      firstName = faker.name.firstName();
+      lastName = faker.name.lastName();
+      giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
+
+      //click button to proceed
+      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+
+      //click button to confirm details
+      checkoutPage.getConfirmDetailsButton().should("be.visible").click();
+
+      cy.get("@testcard").then((testcard) => {
+        cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
+        cardNumber = testcard.PAN;
+        cardCvv = testcard.CVV;
+        cardZip = testcard.ZIP_CODE;
+        cardName = testcard.NAME;
+
+        //verify that checkout form is loaded
+        cy.frameLoaded("[id^=hostedform]");
+        //fill card details
+        checkoutPage.fillCardDetails(
+          cardName,
+          cardZip,
+          cardNumber,
+          cardExpiry,
+          cardCvv
+        );
+        //submit card details
+        cy.iframe("[id^=hostedform]").find("button#submitButton").click();
       });
 
-      it("should verify that user can purchase gift card of fixed value for self", () => {
-        //select option for $50
-        giftCardsPage.selectOption("50");
+      //verify success page is displayed
+      checkoutPage.verifySuccessPage();
+    });
 
-        //enter email, first name and last name
-        senderEmail = Cypress.env("sender_email");
-        firstName = faker.name.firstName();
-        lastName = faker.name.lastName();
-        giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
+    it("should verify that user can purchase gift card of fixed value for others", () => {
+      giftCardsPage.getSendToOthersTab().click();
+      //select amount
+      giftCardsPage.selectOption("150");
 
-        //click button to proceed
-        giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+      //enter email, first name and last name for sender
+      senderEmail = Cypress.env("sender_email");
+      firstName = faker.name.firstName();
+      lastName = faker.name.lastName();
+      giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
 
-        //click button to confirm details
-        checkoutPage.getConfirmDetailsButton().should("be.visible").click();
+      //enter recipient email and message
+      recipientEmail = Cypress.env("recipient_email");
+      message = faker.lorem.lines({ min: 1, max: 1 });
+      giftCardsPage.fillRecipientForm(recipientEmail, message);
 
-        cy.get("@testcard").then((testcard) => {
-          cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
-          cardNumber = testcard.PAN;
-          cardCvv = testcard.CVV;
-          cardZip = testcard.ZIP_CODE;
-          cardName = testcard.NAME;
+      //click button to proceed
+      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
 
-          //verify that checkout form is loaded
-          cy.frameLoaded("[id^=hostedform]");
-          //fill card details
-          checkoutPage.fillCardDetails(
-            cardName,
-            cardZip,
-            cardNumber,
-            cardExpiry,
-            cardCvv
-          );
-          //submit card details
-          cy.iframe("[id^=hostedform]").find("button#submitButton").click();
-        });
+      //click button to confirm details
+      checkoutPage.getConfirmDetailsButton().should("be.visible").click();
 
-        //verify success page is displayed
-        checkoutPage.verifySuccessPage();
+      //enter valid card details
+      cy.get("@testcard").then((testcard) => {
+        cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
+        cardNumber = testcard.PAN;
+        cardCvv = testcard.CVV;
+        cardZip = testcard.ZIP_CODE;
+        cardName = testcard.NAME;
+
+        //verify that checkout form is loaded
+        cy.frameLoaded("[id^=hostedform]");
+        //fill card details
+        checkoutPage.fillCardDetails(
+          cardName,
+          cardZip,
+          cardNumber,
+          cardExpiry,
+          cardCvv
+        );
+        //submit card details
+        cy.iframe("[id^=hostedform]").find("button#submitButton").click();
       });
 
-      it("should verify that user can purchase gift card of fixed value for others", () => {
-        giftCardsPage.getSendToOthersTab().click();
-        //select amount
-        giftCardsPage.selectOption("150");
+      //verify success page is displayed
+      checkoutPage.verifySuccessPage();
+    });
 
-        //enter email, first name and last name for sender
-        senderEmail = Cypress.env("sender_email");
-        firstName = faker.name.firstName();
-        lastName = faker.name.lastName();
-        giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
+    it("should verify that user can purchase gift card of user-defined value for self", () => {
+      //enter giftcard value within range 25 - 100
+      giftCardsPage.selectOption("Other");
+      giftCardsPage
+        .getAmountInputField()
+        .type(faker.number.int({ min: 25, max: 1000 }));
 
-        //enter recipient email and message
-        recipientEmail = Cypress.env("recipient_email");
-        message = faker.lorem.lines({ min: 1, max: 1 });
-        giftCardsPage.fillRecipientForm(recipientEmail, message);
+      //enter email, first name and last name
+      senderEmail = Cypress.env("sender_email");
+      firstName = faker.name.firstName();
+      lastName = faker.name.lastName();
+      giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
 
-        //click button to proceed
-        giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+      //click button to proceed
+      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
 
-        //click button to confirm details
-        checkoutPage.getConfirmDetailsButton().should("be.visible").click();
+      //click button to confirm details
+      checkoutPage.getConfirmDetailsButton().should("be.visible").click();
 
-        //enter valid card details
-        cy.get("@testcard").then((testcard) => {
-          cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
-          cardNumber = testcard.PAN;
-          cardCvv = testcard.CVV;
-          cardZip = testcard.ZIP_CODE;
-          cardName = testcard.NAME;
+      cy.get("@testcard").then((testcard) => {
+        cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
+        cardNumber = testcard.PAN;
+        cardCvv = testcard.CVV;
+        cardZip = testcard.ZIP_CODE;
+        cardName = testcard.NAME;
 
-          //verify that checkout form is loaded
-          cy.frameLoaded("[id^=hostedform]");
-          //fill card details
-          checkoutPage.fillCardDetails(
-            cardName,
-            cardZip,
-            cardNumber,
-            cardExpiry,
-            cardCvv
-          );
-          //submit card details
-          cy.iframe("[id^=hostedform]").find("button#submitButton").click();
-        });
-
-        //verify success page is displayed
-        checkoutPage.verifySuccessPage();
+        //verify that checkout form is loaded
+        cy.frameLoaded("[id^=hostedform]");
+        //fill card details
+        checkoutPage.fillCardDetails(
+          cardName,
+          cardZip,
+          cardNumber,
+          cardExpiry,
+          cardCvv
+        );
+        //submit card details
+        cy.iframe("[id^=hostedform]").find("button#submitButton").click();
       });
 
-      it("should verify that user can purchase gift card of user-defined value for self", () => {
-        //enter giftcard value within range 25 - 100
-        giftCardsPage.selectOption("Other");
-        giftCardsPage
-          .getAmountInputField()
-          .type(faker.number.int({ min: 25, max: 1000 }));
+      //verify success page is displayed
+      checkoutPage.verifySuccessPage();
+    });
 
-        //enter email, first name and last name
-        senderEmail = Cypress.env("sender_email");
-        firstName = faker.name.firstName();
-        lastName = faker.name.lastName();
-        giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
+    it("should verify that user can purchase gift card of user-dfined value for others", () => {
+      giftCardsPage.getSendToOthersTab().click();
+      //enter giftcard value within range 25 - 100
+      giftCardsPage.selectOption("Other");
+      giftCardsPage
+        .getAmountInputField()
+        .type(faker.number.int({ min: 25, max: 1000 }));
 
-        //click button to proceed
-        giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+      //enter email, first name and last name for sender
+      senderEmail = Cypress.env("sender_email");
+      firstName = faker.name.firstName();
+      lastName = faker.name.lastName();
+      giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
 
-        //click button to confirm details
-        checkoutPage.getConfirmDetailsButton().should("be.visible").click();
+      //enter recipient email and message
+      recipientEmail = Cypress.env("recipient_email");
+      message = faker.lorem.lines({ min: 1, max: 1 });
+      giftCardsPage.fillRecipientForm(recipientEmail, message);
 
-        cy.get("@testcard").then((testcard) => {
-          cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
-          cardNumber = testcard.PAN;
-          cardCvv = testcard.CVV;
-          cardZip = testcard.ZIP_CODE;
-          cardName = testcard.NAME;
+      //click button to proceed
+      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
 
-          //verify that checkout form is loaded
-          cy.frameLoaded("[id^=hostedform]");
-          //fill card details
-          checkoutPage.fillCardDetails(
-            cardName,
-            cardZip,
-            cardNumber,
-            cardExpiry,
-            cardCvv
-          );
-          //submit card details
-          cy.iframe("[id^=hostedform]").find("button#submitButton").click();
-        });
+      //click button to confirm details
+      checkoutPage.getConfirmDetailsButton().should("be.visible").click();
 
-        //verify success page is displayed
-        checkoutPage.verifySuccessPage();
+      cy.get("@testcard").then((testcard) => {
+        cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
+        cardNumber = testcard.PAN;
+        cardCvv = testcard.CVV;
+        cardZip = testcard.ZIP_CODE;
+        cardName = testcard.NAME;
+
+        //verify that checkout form is loaded
+        cy.frameLoaded("[id^=hostedform]");
+        //fill card details
+        checkoutPage.fillCardDetails(
+          cardName,
+          cardZip,
+          cardNumber,
+          cardExpiry,
+          cardCvv
+        );
+        //submit card details
+        cy.iframe("[id^=hostedform]").find("button#submitButton").click();
       });
 
-      it("should verify that user can purchase gift card of user-dfined value for others", () => {
-        giftCardsPage.getSendToOthersTab().click();
-        //enter giftcard value within range 25 - 100
-        giftCardsPage.selectOption("Other");
-        giftCardsPage
-          .getAmountInputField()
-          .type(faker.number.int({ min: 25, max: 1000 }));
-
-        //enter email, first name and last name for sender
-        senderEmail = Cypress.env("sender_email");
-        firstName = faker.name.firstName();
-        lastName = faker.name.lastName();
-        giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
-
-        //enter recipient email and message
-        recipientEmail = Cypress.env("recipient_email");
-        message = faker.lorem.lines({ min: 1, max: 1 });
-        giftCardsPage.fillRecipientForm(recipientEmail, message);
-
-        //click button to proceed
-        giftCardsPage.getSubmitButton().eq(0).click({ force: true });
-
-        //click button to confirm details
-        checkoutPage.getConfirmDetailsButton().should("be.visible").click();
-
-        cy.get("@testcard").then((testcard) => {
-          cardExpiry = `${testcard.EXPIRY_MONTH}/${testcard.EXPIRY_YEAR}`;
-          cardNumber = testcard.PAN;
-          cardCvv = testcard.CVV;
-          cardZip = testcard.ZIP_CODE;
-          cardName = testcard.NAME;
-
-          //verify that checkout form is loaded
-          cy.frameLoaded("[id^=hostedform]");
-          //fill card details
-          checkoutPage.fillCardDetails(
-            cardName,
-            cardZip,
-            cardNumber,
-            cardExpiry,
-            cardCvv
-          );
-          //submit card details
-          cy.iframe("[id^=hostedform]").find("button#submitButton").click();
-        });
-
-        //verify success page is displayed
-        checkoutPage.verifySuccessPage();
-      });
+      //verify success page is displayed
+      checkoutPage.verifySuccessPage();
     });
   });
 });
