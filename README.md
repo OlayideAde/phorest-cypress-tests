@@ -13,6 +13,6 @@ This repo contains UI e2e test scripts for the gift cards/voucher purchase featu
 
 ## Run on Git
 You can run tests in this project using github actions.
-1. Open the project repo on github
+1. Open the [project repo](https://github.com/OlayideAde/phorest-cypress-tests) on github
 2. Access the `Actions` tab of this repositiory on github
 3. On the left menu, select the `cypress headless browser tests` workflow and then click the  `Run workflow` button
