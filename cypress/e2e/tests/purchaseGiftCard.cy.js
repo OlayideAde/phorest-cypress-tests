@@ -15,7 +15,7 @@ let senderEmail;
 let recipientEmail;
 let message;
 
-describe("Purchase Gift cards tests", () => {
+describe("Purchase Gift cards e2e tests", () => {
   before(() => {
     giftCardsPage = new GiftCardsPage();
     checkoutPage = new CheckoutPage();
@@ -38,7 +38,7 @@ describe("Purchase Gift cards tests", () => {
       giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
 
       //click button to proceed
-      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+      giftCardsPage.getSubmitButton().click({ force: true });
 
       //click button to confirm details
       checkoutPage.getConfirmDetailsButton().should("be.visible").click();
@@ -70,7 +70,7 @@ describe("Purchase Gift cards tests", () => {
 
     it("should verify that user can purchase gift card of fixed value for others", () => {
       giftCardsPage.getSendToOthersTab().click();
-      //select amount
+      //select option for $150
       giftCardsPage.selectOption("150");
 
       //enter email, first name and last name for sender
@@ -85,7 +85,7 @@ describe("Purchase Gift cards tests", () => {
       giftCardsPage.fillRecipientForm(recipientEmail, message);
 
       //click button to proceed
-      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+      giftCardsPage.getSubmitButton().click({ force: true });
 
       //click button to confirm details
       checkoutPage.getConfirmDetailsButton().should("be.visible").click();
@@ -130,7 +130,7 @@ describe("Purchase Gift cards tests", () => {
       giftCardsPage.fillSenderForm(senderEmail, firstName, lastName);
 
       //click button to proceed
-      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+      giftCardsPage.getSubmitButton().click({ force: true });
 
       //click button to confirm details
       checkoutPage.getConfirmDetailsButton().should("be.visible").click();
@@ -160,7 +160,7 @@ describe("Purchase Gift cards tests", () => {
       checkoutPage.verifySuccessPage();
     });
 
-    it("should verify that user can purchase gift card of user-dfined value for others", () => {
+    it("should verify that user can purchase gift card of user-defined value for others", () => {
       giftCardsPage.getSendToOthersTab().click();
       //enter giftcard value within range 25 - 100
       giftCardsPage.selectOption("Other");
@@ -180,7 +180,7 @@ describe("Purchase Gift cards tests", () => {
       giftCardsPage.fillRecipientForm(recipientEmail, message);
 
       //click button to proceed
-      giftCardsPage.getSubmitButton().eq(0).click({ force: true });
+      giftCardsPage.getSubmitButton().click({ force: true });
 
       //click button to confirm details
       checkoutPage.getConfirmDetailsButton().should("be.visible").click();

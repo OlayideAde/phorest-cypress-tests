@@ -20,7 +20,7 @@ export class GiftCardsPage {
   }
 
   getSubmitButton() {
-    return cy.get('button[data-target="checkout.checkoutButton"]');
+    return cy.get('button[data-target="checkout.checkoutButton"]').eq(0);
   }
 
   getAmountInputField() {
