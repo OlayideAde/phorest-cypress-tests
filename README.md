@@ -1,6 +1,6 @@
 # Phorest-cypress-tests
 
-This repo contains UI e2e test scripts for the gift cards/voucher purchase feature on Phorest demo salon site.
+This repo contains UI e2e test scripts for the gift cards/voucher purchase feature on Phorest demo salon site using cypress framework.
 
 
 ## Run tests locally
